@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const RARITY_5_STAR_RATE = 0.006; // 0.6%
     const RARITY_4_STAR_RATE = 0.051; // 5.1%
 
+    const SOFT_PITY_5_STAR_THRESHOLD = 74;
+    const HARD_PITY_5_STAR_THRESHOLD = 90;
+    const HARD_PITY_4_STAR_THRESHOLD = 10;
+
     const HSR_CHARACTERS = [
         // --- 5-STAR CHARACTERS ---
         {
@@ -346,15 +350,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const characterInventoryDiv = document.getElementById('characterInventory');
     const clearResultsButton = document.getElementById('clearResultsButton');
     const clearInventoryButton = document.getElementById('clearInventoryButton');
+    const resetStatsButton = document.getElementById('resetStatsButton'); 
+    const totalPullsDisplay = document.getElementById('totalPullsDisplay');
+    const pityCountDisplay = document.getElementById('pityCountDisplay');
 
     const clickSFX = document.getElementById('clickSFX');
     const backgroundMusic = document.getElementById('backgroundMusic');
 
     let hasUserInteracted = false;
 
+    let totalPulls = parseInt(localStorage.getItem('totalPulls')) || 0;
+    let pityCount = parseInt(localStorage.getItem('pityCount')) || 0;
+    let pity4StarCount = parseInt(localStorage.getItem('pity4StarCount')) || 0;
+
     const characterInventory = new Map(
         JSON.parse(localStorage.getItem('hsrCharacterInventory')) || []
     );
+
+    function saveStats() {
+        localStorage.setItem('totalPulls', totalPulls);
+        localStorage.setItem('pityCount', pityCount);
+        localStorage.setItem('pity4StarCount', pity4StarCount);
+    }
+
+
+    function updatePityDisplay() {
+        totalPullsDisplay.textContent = totalPulls;
+        
+        pityCountDisplay.textContent = pityCount + 0;
+
+    }
 
     function saveInventory() {
         localStorage.setItem(
@@ -364,11 +389,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getPulledCharacter() {
+        
+        if (pityCount + 1 === HARD_PITY_5_STAR_THRESHOLD) {
+            console.log("Hard Pity 5-Star reached!");
+            return CHARACTERS_5_STAR[Math.floor(Math.random() * CHARACTERS_5_STAR.length)];
+        }
+
+        
+        if (pity4StarCount + 1 === HARD_PITY_4_STAR_THRESHOLD) {
+            console.log("Hard Pity 4-Star reached!");
+            return CHARACTERS_4_STAR[Math.floor(Math.random() * CHARACTERS_4_STAR.length)];
+        }
+
+
+        let current5StarRate = RARITY_5_STAR_RATE; 
+
+
+        if (pityCount >= SOFT_PITY_5_STAR_THRESHOLD) {
+            
+            current5StarRate += (pityCount - SOFT_PITY_5_STAR_THRESHOLD + 1) * 0.06;
+            current5StarRate = Math.min(current5StarRate, 1.0);
+            console.log(`Soft Pity: Pull ${pityCount + 1}, New 5-star rate: ${(current5StarRate * 100).toFixed(2)}%`);
+        }
+
         const rand = Math.random();
 
-        if (rand < RARITY_5_STAR_RATE) {
+
+        if (rand < current5StarRate) {
             return CHARACTERS_5_STAR[Math.floor(Math.random() * CHARACTERS_5_STAR.length)];
-        } else if (rand < (RARITY_5_STAR_RATE + RARITY_4_STAR_RATE)) {
+        } else if (rand < (current5StarRate + RARITY_4_STAR_RATE)) { 
             return CHARACTERS_4_STAR[Math.floor(Math.random() * CHARACTERS_4_STAR.length)];
         } else {
             return GENERIC_3_STAR[Math.floor(Math.random() * GENERIC_3_STAR.length)];
@@ -397,7 +446,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateCharacterInventory(character) {
-
         if (character.rarity >= 4) {
             const currentCount = characterInventory.get(character.id) || 0;
             characterInventory.set(character.id, currentCount + 1);
@@ -459,8 +507,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const pulledCharacters = [];
         for (let i = 0; i < numPulls; i++) {
+            totalPulls++;
+            pityCount++;
+            pity4StarCount++; 
+
             const character = getPulledCharacter();
             pulledCharacters.push(character);
+
+            if (character.rarity === 5) {
+                pityCount = 0; 
+                pity4StarCount = 0; 
+                console.log("Got 5-star! Pity reset.");
+            } else if (character.rarity === 4) {
+                pity4StarCount = 0;
+                console.log("Got 4-star! 4-star pity reset.");
+            }
         }
 
         for (const character of pulledCharacters) {
@@ -475,23 +536,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             await new Promise(resolve => setTimeout(resolve, 300));
         }
+        updatePityDisplay();
+        saveStats();
     }
 
     function handleFirstInteraction() {
         if (!hasUserInteracted) {
-            backgroundMusic.muted = false; 
+            backgroundMusic.muted = false;
             backgroundMusic.play().then(() => {
                 console.log("BGM started after first user interaction.");
             }).catch(e => {
                 console.error("Gagal memutar BGM setelah interaksi:", e);
             });
-            hasUserInteracted = true; 
+            hasUserInteracted = true;
         }
     }
 
-   
+
     pullButton.addEventListener('click', () => {
-        handleFirstInteraction(); 
+        handleFirstInteraction();
         clickSFX.volume = 0.5;
         clickSFX.currentTime = 0;
         clickSFX
@@ -501,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     pull10Button.addEventListener('click', () => {
-        handleFirstInteraction(); 
+        handleFirstInteraction();
         clickSFX.volume = 0.5;
         clickSFX.currentTime = 0;
         clickSFX
@@ -511,12 +574,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     clearResultsButton.addEventListener('click', () => {
-        handleFirstInteraction(); 
+        handleFirstInteraction();
         pullResultsDiv.innerHTML = '<p class="initial-message">Tekan tombol \'Pull\' untuk memulai!</p>';
     });
 
     clearInventoryButton.addEventListener('click', () => {
-        handleFirstInteraction(); 
+        handleFirstInteraction();
         if (confirm('Apakah Anda yakin ingin menghapus semua karakter dari koleksi?')) {
             characterInventory.clear();
             saveInventory();
@@ -525,9 +588,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    renderCharacterInventory();
+    
+    if (resetStatsButton) { 
+        resetStatsButton.addEventListener('click', () => {
+            handleFirstInteraction();
+            if (confirm('Apakah Anda yakin ingin mereset semua statistik Pull dan Pity? Ini tidak akan menghapus Inventory Karakter Anda.')) {
+                totalPulls = 0;
+                pityCount = 0;
+                pity4StarCount = 0;
+                saveStats();
+                updatePityDisplay();
+                alert('Statistik Pull dan Pity berhasil direset!');
+            }
+        });
+    }
 
-    if (backgroundMusic) { 
+    renderCharacterInventory();
+    updatePityDisplay();
+    saveStats();
+
+    if (backgroundMusic) {
         backgroundMusic.play().then(() => {
             console.log("BGM muted autoplay attempted.");
         }).catch(e => {
