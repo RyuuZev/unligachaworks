@@ -475,6 +475,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function handleFirstInteraction() {
+        if (!hasUserInteracted) {
+            backgroundMusic.muted = false; // Unmute BGM
+            backgroundMusic.play().then(() => {
+                console.log("BGM started after first user interaction.");
+            }).catch(e => {
+                console.error("Gagal memutar BGM setelah interaksi:", e);
+                // Ini mungkin terjadi jika pengguna masih memblokir audio secara global di browser
+            });
+            hasUserInteracted = true;
+        }
+    }
+    
     pullButton.addEventListener('click', () => {
         clickSFX.volume = 0.5;
         clickSFX.currentTime = 0;
