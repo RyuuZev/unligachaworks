@@ -340,9 +340,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
+    const HSR_LIGHT_CONES = [
+    // --- 5-STAR LIGHT CONES ---
+    { id: 'lc_5_star_1', name: 'Light Cone 5-Star A', rarity: 5, imageUrl: 'images/lightcones/lc_5s_a.webp' },
+    { id: 'lc_5_star_2', name: 'Light Cone 5-Star B', rarity: 5, imageUrl: 'images/lightcones/lc_5s_b.webp' },
+    // Tambahkan lebih banyak Light Cone 5-bintang jika ada
+    // Contoh:
+    // { id: 'earths_call', name: "Earth's Call", rarity: 5, imageUrl: 'images/lightcones/earths_call.webp' },
+    // { id: 'past_self_in_mirror', name: "Past Self in Mirror", rarity: 5, imageUrl: 'images/lightcones/past_self_in_mirror.webp' },
+
+
+    // --- 4-STAR LIGHT CONES ---
+    { id: 'lc_4_star_1', name: 'Light Cone 4-Star A', rarity: 4, imageUrl: 'images/lightcones/lc_4s_a.webp' },
+    { id: 'lc_4_star_2', name: 'Light Cone 4-Star B', rarity: 4, imageUrl: 'images/lightcones/lc_4s_b.webp' },
+    // Tambahkan lebih banyak Light Cone 4-bintang jika ada
+    // Contoh:
+    // { id: 'fermata', name: "Fermata", rarity: 4, imageUrl: 'images/lightcones/fermata.webp' },
+    // { id: 'good_night_and_sleepwell', name: "Good Night and Sleepwell", rarity: 4, imageUrl: 'images/lightcones/good_night_and_sleepwell.webp' },
+
+    // --- 3-STAR LIGHT CONES (ini biasanya yang kamu dapat dari karakter 3-bintang yang sudah ada) ---
+    // Kamu mungkin sudah punya beberapa yang di-hardcode sebagai GENERIC_3_STAR,
+    // tapi ini untuk light cone murni. Jika ingin lebih detail, bisa tambahkan di sini.
+    { id: 'lc_3_star_1', name: 'Light Cone 3-Star A', rarity: 3, imageUrl: 'images/lightcones/lc_3s_a.webp' },
+    { id: 'lc_3_star_2', name: 'Light Cone 3-Star B', rarity: 3, imageUrl: 'images/lightcones/lc_3s_b.webp' },
+    // ...
+];
+
+
     const CHARACTERS_5_STAR = HSR_CHARACTERS.filter(c => c.rarity === 5);
     const CHARACTERS_4_STAR = HSR_CHARACTERS.filter(c => c.rarity === 4);
     const GENERIC_3_STAR = HSR_CHARACTERS.filter(c => c.rarity === 3);
+
+    const LIGHT_CONES_5_STAR = HSR_LIGHT_CONES.filter(lc => lc.rarity === 5);
+    const LIGHT_CONES_4_STAR = HSR_LIGHT_CONES.filter(lc => lc.rarity === 4);
+    const LIGHT_CONES_3_STAR = HSR_LIGHT_CONES.filter(lc => lc.rarity === 3);
 
     const pullButton = document.getElementById('pullButton');
     const pull10Button = document.getElementById('pull10Button');
@@ -353,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetStatsButton = document.getElementById('resetStatsButton'); 
     const totalPullsDisplay = document.getElementById('totalPullsDisplay');
     const pityCountDisplay = document.getElementById('pityCountDisplay');
+    const previousPityDisplay = document.getElementById('previousPityDisplay');
 
     const clickSFX = document.getElementById('clickSFX');
     const backgroundMusic = document.getElementById('backgroundMusic');
@@ -362,6 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let totalPulls = parseInt(localStorage.getItem('totalPulls')) || 0;
     let pityCount = parseInt(localStorage.getItem('pityCount')) || 0;
     let pity4StarCount = parseInt(localStorage.getItem('pity4StarCount')) || 0;
+    let previousPity = parseInt(localStorage.getItem('previousPity')) || 0;
 
     const characterInventory = new Map(
         JSON.parse(localStorage.getItem('hsrCharacterInventory')) || []
@@ -371,6 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('totalPulls', totalPulls);
         localStorage.setItem('pityCount', pityCount);
         localStorage.setItem('pity4StarCount', pity4StarCount);
+        localStorage.setItem('previousPity', previousPity);
     }
 
 
@@ -378,6 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPullsDisplay.textContent = totalPulls;
         
         pityCountDisplay.textContent = pityCount + 0;
+        previousPityDisplay.textContent = previousPity;
 
     }
 
@@ -515,6 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pulledCharacters.push(character);
 
             if (character.rarity === 5) {
+                previousPity = pityCount;
                 pityCount = 0; 
                 pity4StarCount = 0; 
                 console.log("Got 5-star! Pity reset.");
