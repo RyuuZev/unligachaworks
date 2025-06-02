@@ -348,6 +348,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearInventoryButton = document.getElementById('clearInventoryButton');
 
     const clickSFX = document.getElementById('clickSFX');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+
+    let hasUserInteracted = false;
 
     const characterInventory = new Map(
         JSON.parse(localStorage.getItem('hsrCharacterInventory')) || []
@@ -411,8 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (characterInventory.size === 0) {
-            characterInventoryDiv.innerHTML = '<p class="initial-message">Belum ada karakter dalam koleksi Anda. Pull sekaran' +
-                    'g!</p>';
+            characterInventoryDiv.innerHTML = '<p class="initial-message">Belum ada karakter dalam koleksi Anda. Pull sekarang!</p>';
             return;
         }
 
@@ -477,18 +479,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleFirstInteraction() {
         if (!hasUserInteracted) {
-            backgroundMusic.muted = false; // Unmute BGM
+            backgroundMusic.muted = false; 
             backgroundMusic.play().then(() => {
                 console.log("BGM started after first user interaction.");
             }).catch(e => {
                 console.error("Gagal memutar BGM setelah interaksi:", e);
-                // Ini mungkin terjadi jika pengguna masih memblokir audio secara global di browser
             });
-            hasUserInteracted = true;
+            hasUserInteracted = true; 
         }
     }
-    
+
+   
     pullButton.addEventListener('click', () => {
+        handleFirstInteraction(); 
         clickSFX.volume = 0.5;
         clickSFX.currentTime = 0;
         clickSFX
@@ -498,6 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     pull10Button.addEventListener('click', () => {
+        handleFirstInteraction(); 
         clickSFX.volume = 0.5;
         clickSFX.currentTime = 0;
         clickSFX
@@ -505,11 +509,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(e => console.warn("Gagal memutar click SFX:", e));
         performPull(10);
     });
+
     clearResultsButton.addEventListener('click', () => {
+        handleFirstInteraction(); 
         pullResultsDiv.innerHTML = '<p class="initial-message">Tekan tombol \'Pull\' untuk memulai!</p>';
     });
 
     clearInventoryButton.addEventListener('click', () => {
+        handleFirstInteraction(); 
         if (confirm('Apakah Anda yakin ingin menghapus semua karakter dari koleksi?')) {
             characterInventory.clear();
             saveInventory();
@@ -519,4 +526,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderCharacterInventory();
+
+    if (backgroundMusic) { 
+        backgroundMusic.play().then(() => {
+            console.log("BGM muted autoplay attempted.");
+        }).catch(e => {
+            console.warn("Muted autoplay BGM blocked, waiting for user interaction.", e);
+        });
+    } else {
+        console.error("Elemen audio BGM dengan ID 'backgroundMusic' tidak ditemukan!");
+    }
 });
