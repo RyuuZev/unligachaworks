@@ -396,3 +396,38 @@ footer a:hover {
         font-size: 0.65em;
     }
 }
+
+.pull-icon {
+    width: 20px; /* Atur lebar ikon sesuai keinginan */
+    height: 20px; /* Atur tinggi ikon sesuai keinginan */
+    vertical-align: middle; /* Sejajarkan ikon dengan teks secara vertikal */
+    margin-right: 5px; /* Beri sedikit jarak antara ikon dan teks */
+    image-rendering: optimizeQuality; /* Memastikan gambar terlihat baik */
+}
+
+/* Penyesuaian untuk tombol pull itu sendiri */
+.pull-section button {
+    display: flex; /* Menggunakan flexbox untuk penempatan ikon dan teks */
+    align-items: center; /* Pusatkan item secara vertikal */
+    justify-content: center; /* Pusatkan item secara horizontal */
+    padding: 10px 20px; /* Sesuaikan padding agar tombol tidak terlalu besar/kecil */
+    font-size: 1.1em; /* Sesuaikan ukuran font teks tombol */
+}
+
+.character-card.rarity-5 {
+    border: 2px solid #FFD700; /* Warna emas */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), /* Efek glow emas */
+                0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.character-card.rarity-5:hover {
+    border-color: #FFEA00; /* Warna emas sedikit lebih terang saat hover */
+    box-shadow: 0 0 20px rgba(255, 234, 0, 0.8), /* Efek glow lebih kuat saat hover */
+                0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Opsional: Jika kamu ingin mengubah warna rarity text di dalam card */
+.character-card.rarity-5 .rarity {
+    color: #FFD700; /* Warna emas untuk teks rarity */
+    font-weight: bold;
+}
