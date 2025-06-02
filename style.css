@@ -1,0 +1,210 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a2e; 
+    color: #e0e0e0; 
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #0f0f1d; 
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 3px solid #6a0572; 
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.8em;
+    color: #e6e6e6;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+header p {
+    font-size: 1.1em;
+    color: #b0b0d0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #2a2a4a; 
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    flex-grow: 1; 
+}
+
+
+.pull-section {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: #3b3b6b; 
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+}
+
+.pull-section button {
+    background-color: #e74c3c; 
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    margin: 10px;
+    border-radius: 8px;
+    font-size: 1.3em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.pull-section button:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+}
+
+.pull-section button:active {
+    transform: translateY(0);
+}
+
+.result-section, .inventory-section {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #3b3b6b;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+}
+
+h2 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 25px;
+    font-size: 2em;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+
+.pull-grid, .inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.character-card {
+    background-color: #4c4c8d; 
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease;
+    border: 2px solid transparent; 
+    position: relative;
+}
+
+.character-card.rarity-5 {
+    border-color: gold; 
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7); 
+}
+
+.character-card.rarity-4 {
+    border-color: #a020f0; 
+    box-shadow: 0 0 10px rgba(160, 32, 240, 0.5); 
+}
+
+.character-card.rarity-3 {
+    border-color: #555;
+}
+
+.character-card:hover {
+    transform: translateY(-5px);
+}
+
+.character-card img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; 
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 3px solid #8e44ad; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.character-card h3 {
+    margin: 5px 0;
+    font-size: 1.1em;
+    color: #e0e0e0;
+}
+
+.character-card p.rarity {
+    font-weight: bold;
+    margin: 0;
+}
+
+.rarity-5 { color: gold; }
+.rarity-4 { color: #a020f0; } 
+.rarity-3 { color: #aaaaaa; } 
+
+.new-badge {
+    position: absolute;
+    top: -10px; 
+    right: -10px; 
+    background-color: #00ff99; 
+    color: #1a1a2e;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+.item-count {
+    font-size: 0.9em;
+    color: #b0b0d0;
+    margin-left: 5px;
+}
+
+.initial-message {
+    text-align: center;
+    grid-column: 1 / -1; 
+    color: #b0b0d0;
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+
+.clear-button {
+    display: block;
+    margin: 15px auto 0;
+    background-color: #6c757d; 
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear-button:hover {
+    background-color: #5a6268; 
+}
+
+
+footer {
+    background-color: #0f0f1d;
+    color: #b0b0d0;
+    text-align: center;
+    padding: 15px 20px;
+    margin-top: 40px;
+    font-size: 0.85em;
+    border-top: 3px solid #6a0572;
+}

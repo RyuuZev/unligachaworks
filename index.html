@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HSR Unlimited Gacha Simulator</title>
+        <link rel="stylesheet" href="style.css">
+        
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+    </head>
+    <body>
+        <header>
+            <h1>Simple HSR Unlimited Gacha Works</h1>
+            <p>Pull sepuasnya tanpa batas coy!</p>
+        </header>
+
+        <main class="container">
+            <section class="pull-section">
+                <button id="pullButton">Pull 1x</button>
+                <button id="pull10Button">Pull 10x</button>
+            </section>
+
+            <section class="result-section">
+                <h2>Hasil Pull Anda:</h2>
+                <div id="pullResults" class="pull-grid">
+                    <p class="initial-message">Tekan tombol 'Pull' untuk memulai!</p>
+                </div>
+                <button id="clearResultsButton" class="clear-button">Bersihkan Hasil Pull</button>
+            </section>
+
+            <section class="inventory-section">
+                <h2>Koleksi Karakter Anda:</h2>
+                <div id="characterInventory" class="inventory-grid">
+                    <p class="initial-message">Belum ada karakter dalam koleksi Anda. Pull sekarang!</p>
+                </div>
+                <button id="clearInventoryButton" class="clear-button">Bersihkan Koleksi</button>
+            </section>
+        </main>
+
+        <audio id="backgroundMusic" loop="loop" autoplay="autoplay">
+            <source src="audio/hsr_bgm.mp3" type="audio/mpeg">
+            Browser Anda tidak mendukung elemen audio.
+        </audio>
+
+        <footer>
+            <p>&copy; 2025 HSR Unlimited Gacha Simulator. Dibuat oleh Fans untuk Fans.</p>
+            <p>Disclaimer: Ini hanyalah simulasi. Honkai: Star Rail & karakter adalah milik
+                HoYoverse.</p>
+            <p>GitHub:
+                <a href="https://github.com/namakamu/nama-repo-proyek" target="_blank">Honkai Star Rail Gacha Simulator</a>
+            </p>
+        </footer>
+
+        <audio id="clickSFX">
+            <source src="audio/button_click_sfx.mp3" type="audio/mpeg">
+            Browser Anda tidak mendukung elemen audio.
+        </audio>
+
+        <script src="script.js"></script>
+    </body>
+</html>
